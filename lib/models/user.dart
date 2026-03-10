@@ -78,6 +78,7 @@ class UserSettings {
   bool darkMode;
   bool bottomNavAutoHide;
   DateTime? competitionDate;
+  DateTime? competitionDate;
   DateTime? competitionDate; // Added
 
   UserSettings({
@@ -100,6 +101,8 @@ class UserSettings {
       theme: json['theme'] ?? 'blue',
       darkMode: json['darkMode'] ?? false,
       bottomNavAutoHide: json['bottomNavAutoHide'] ?? false,
+      'competitionDate': competitionDate?.toIso8601String(),
+      competitionDate: json['competitionDate'] != null ? DateTime.parse(json['competitionDate']) : null,
       'competitionDate': competitionDate?.toIso8601String(),
       competitionDate: json['competitionDate'] != null ? DateTime.parse(json['competitionDate']) : null,
     );

@@ -83,3 +83,23 @@ class LocalStorage {
     await saveRawData(data);
   }
 }
+
+  static const String _workoutKey = 'savedWorkout';
+
+  static Future<void> saveWorkout(Workout workout) async {
+    await _prefs.setString(_workoutKey, jsonEncode(workout.toJson()));
+  }
+
+  static Workout? loadWorkout() {
+    final String? data = _prefs.getString(_workoutKey);
+    if (data == null) return null;
+    try {
+      return Workout.fromJson(jsonDecode(data));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static Future<void> removeWorkout() async {
+    await _prefs.remove(_workoutKey);
+  }
