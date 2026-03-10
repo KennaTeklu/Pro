@@ -1,3 +1,4 @@
+import "dart:math";
 import 'dart:math';
 import 'dart:collection';
 import 'dart:math' as math;
@@ -198,8 +199,6 @@ class DataService {
 
     // Competition factor
     double compFactor = 1.0;
-    if (user.settings.competitionDate != null) {
-      final meetDate = user.settings.competitionDate!;
       final daysToMeet = meetDate.difference(DateTime.now()).inDays;
       if (daysToMeet >= 0) {
         if (daysToMeet <= 7) compFactor = 0.8;
@@ -319,7 +318,6 @@ class DataService {
     final now = DateTime.now();
     final systemicFactor = calculateSystemicRecoveryFactor();
     final needsDeload = systemicFactor < 0.6;
-    final compDate = user.settings.competitionDate;
     bool isTapering = false;
     if (compDate != null) {
       final daysToMeet = compDate.difference(now).inDays;
