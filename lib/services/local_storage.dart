@@ -30,7 +30,6 @@ class LocalStorage {
     await _prefs.remove('workoutData');
   }
 
-  // Convenience methods for our data structure
   static ({User user, List<Workout> workouts, Map<String, dynamic> exercises})? loadData() {
     final raw = loadRawData();
     if (raw == null) return null;
@@ -58,5 +57,24 @@ class LocalStorage {
       'exercises': exercises,
     };
     await saveRawData(data);
+  }
+
+  // Workout-specific methods for resume functionality
+  static const String _workoutKey = 'currentWorkout';
+
+  static Future<void> saveWorkout(Workout workout) async {
+    await _prefs.setString(_workoutKey, jsonEncode(workout.toJson()));
+  }
+
+  static Workout? loadWorkout() {
+    final String? data = _prefs.getString(_workoutKey);
+    if (data != null) {
+      return Workout.fromJson(jsonDecode(data));
+    }
+    return null;
+  }
+
+  static Future<void> removeWorkout() async {
+    await _prefs.remove(_workoutKey);
   }
 }

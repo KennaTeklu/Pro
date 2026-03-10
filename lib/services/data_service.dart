@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math' as math;
 import '../models/user.dart';
 import '../models/workout.dart';
 import '../models/muscle.dart';
@@ -187,7 +188,7 @@ class DataService {
             : daysSince / muscleDef.restDays;
         // sigmoid for muscle specific
         const k = 6.0;
-        final muscleSpecific = 1 / (1 + (k * (0.5 - recoveryPercent)).exp());
+        final muscleSpecific = 1 / (1 + math.exp(k * (0.5 - recoveryPercent)));
         final systemic = calculateSystemicRecoveryFactor();
         recoveryFactor = 0.7 * muscleSpecific + 0.3 * systemic;
         recoveryFactor = recoveryFactor.clamp(0.5, 1.0);
@@ -777,7 +778,7 @@ class DataService {
 
     final mean = avgWeekly > 0 ? avgWeekly : 0.01;
     final variance = weeklyCounts.map((v) => (v - mean) * (v - mean)).reduce((a, b) => a + b) / 8;
-    final stdDev = variance.sqrt();
+    final stdDev = math.sqrt(variance);
     final cv = mean > 0 ? stdDev / mean : 0;
     double regularityScore = cv <= 0.3 ? 10 : cv <= 0.5 ? 7 : cv <= 0.7 ? 4 : cv <= 1.0 ? 2 : 0;
 
@@ -929,7 +930,6 @@ class DataService {
   }
 
   // ---------- Streak (override with rest‑aware) ----------
-  @override
   int calculateStreak() {
     if (workouts.isEmpty) return 0;
     final sorted = List<Workout>.from(workouts)..sort((a, b) => a.date.compareTo(b.date));

@@ -71,6 +71,7 @@ class UserSettings {
   String theme;
   bool darkMode;
   bool bottomNavAutoHide;
+  DateTime? competitionDate; // Added
 
   UserSettings({
     this.workoutDays = const ['monday', 'wednesday', 'friday'],
@@ -79,6 +80,7 @@ class UserSettings {
     this.theme = 'blue',
     this.darkMode = false,
     this.bottomNavAutoHide = false,
+    this.competitionDate,
   });
 
   factory UserSettings.fromJson(Map<String, dynamic> json) {
@@ -89,6 +91,7 @@ class UserSettings {
       theme: json['theme'] ?? 'blue',
       darkMode: json['darkMode'] ?? false,
       bottomNavAutoHide: json['bottomNavAutoHide'] ?? false,
+      competitionDate: json['competitionDate'] != null ? DateTime.parse(json['competitionDate']) : null,
     );
   }
 
@@ -100,6 +103,7 @@ class UserSettings {
       'theme': theme,
       'darkMode': darkMode,
       'bottomNavAutoHide': bottomNavAutoHide,
+      'competitionDate': competitionDate?.toIso8601String(),
     };
   }
 }
