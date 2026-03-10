@@ -40,6 +40,7 @@ class User {
       goal: json['goal'] ?? 'balanced',
       created: json['created'] != null ? DateTime.parse(json['created']) : DateTime.now(),
       settings: json['settings'] != null ? UserSettings.fromJson(json['settings']) : UserSettings(),
+     competitionDate: json[competitionDate] != null ? DateTime.parse(json[competitionDate]) : null,
       agingRisks: (json['agingRisks'] as List?)
           ?.map((r) => AgingRisk.fromJson(r))
           .toList() ?? [],
@@ -48,6 +49,7 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
+      competitionDate: competitionDate?.toIso8601String(),
     return {
       'name': name,
       'birthDate': birthDate?.toIso8601String(),
@@ -58,13 +60,17 @@ class User {
       'goal': goal,
       'created': created.toIso8601String(),
       'settings': settings.toJson(),
+      competitionDate: competitionDate?.toIso8601String(),
       'agingRisks': agingRisks.map((r) => r.toJson()).toList(),
+      competitionDate: competitionDate?.toIso8601String(),
       'menstrual': menstrual?.toJson(),
+      competitionDate: competitionDate?.toIso8601String(),
     };
   }
 }
 
 class UserSettings {
+  DateTime? competitionDate;
   List<String> workoutDays;
   int restTime;
   double progressionRate;
@@ -74,6 +80,7 @@ class UserSettings {
   DateTime? competitionDate; // Added
 
   UserSettings({
+    this.competitionDate,
     this.workoutDays = const ['monday', 'wednesday', 'friday'],
     this.restTime = 90,
     this.progressionRate = 0.02,
@@ -84,6 +91,7 @@ class UserSettings {
   });
 
   factory UserSettings.fromJson(Map<String, dynamic> json) {
+     competitionDate: json[competitionDate] != null ? DateTime.parse(json[competitionDate]) : null,
     return UserSettings(
       workoutDays: List<String>.from(json['workoutDays'] ?? ['monday', 'wednesday', 'friday']),
       restTime: json['restTime'] ?? 90,
@@ -96,6 +104,7 @@ class UserSettings {
   }
 
   Map<String, dynamic> toJson() {
+      competitionDate: competitionDate?.toIso8601String(),
     return {
       'workoutDays': workoutDays,
       'restTime': restTime,
@@ -134,6 +143,7 @@ class AgingRisk {
   }
 
   Map<String, dynamic> toJson() {
+      competitionDate: competitionDate?.toIso8601String(),
     return {
       'factor': factor,
       'severity': severity,
@@ -160,6 +170,7 @@ class MenstrualData {
   }
 
   Map<String, dynamic> toJson() {
+      competitionDate: competitionDate?.toIso8601String(),
     return {
       'lastPeriodStart': lastPeriodStart?.toIso8601String(),
       'cycleLength': cycleLength,
