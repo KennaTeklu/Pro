@@ -5,6 +5,7 @@ import '../models/workout.dart';
 
 class LocalStorage {
   static late SharedPreferences _prefs;
+  static const String _workoutKey = 'savedWorkout';
 
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -30,30 +31,6 @@ class LocalStorage {
     await _prefs.remove('workoutData');
   }
 
-  // Methods for workout persistence
-  static const String _workoutKey = 'currentWorkout';
-
-  static void saveWorkout(Workout workout) {
-    _prefs.setString(_workoutKey, jsonEncode(workout.toJson()));
-  }
-
-  static Workout? loadWorkout() {
-    final String? data = _prefs.getString(_workoutKey);
-    if (data != null) {
-      try {
-        return Workout.fromJson(jsonDecode(data));
-      } catch (e) {
-        return null;
-      }
-    }
-    return null;
-  }
-
-  static void removeWorkout() {
-    _prefs.remove(_workoutKey);
-  }
-
-  // Convenience methods for our data structure
   static ({User user, List<Workout> workouts, Map<String, dynamic> exercises})? loadData() {
     final raw = loadRawData();
     if (raw == null) return null;
@@ -82,9 +59,6 @@ class LocalStorage {
     };
     await saveRawData(data);
   }
-}
-
-  static const String _workoutKey = 'savedWorkout';
 
   static Future<void> saveWorkout(Workout workout) async {
     await _prefs.setString(_workoutKey, jsonEncode(workout.toJson()));
@@ -103,3 +77,4 @@ class LocalStorage {
   static Future<void> removeWorkout() async {
     await _prefs.remove(_workoutKey);
   }
+}

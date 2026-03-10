@@ -4,14 +4,15 @@ class User {
   String name;
   DateTime? birthDate;
   String gender;
-  double? weight;      // lbs
-  double? height;      // inches
-  String experience;   // beginner, intermediate, advanced
-  String goal;         // strength, hypertrophy, endurance, longevity, balanced
+  double? weight;
+  double? height;
+  String experience;
+  String goal;
   DateTime created;
   UserSettings settings;
   List<AgingRisk> agingRisks;
   MenstrualData? menstrual;
+  DateTime? competitionDate;
 
   User({
     this.name = '',
@@ -25,6 +26,7 @@ class User {
     UserSettings? settings,
     List<AgingRisk>? agingRisks,
     this.menstrual,
+    this.competitionDate,
   })  : created = created ?? DateTime.now(),
         settings = settings ?? UserSettings(),
         agingRisks = agingRisks ?? [];
@@ -40,16 +42,15 @@ class User {
       goal: json['goal'] ?? 'balanced',
       created: json['created'] != null ? DateTime.parse(json['created']) : DateTime.now(),
       settings: json['settings'] != null ? UserSettings.fromJson(json['settings']) : UserSettings(),
-     competitionDate: json[competitionDate] != null ? DateTime.parse(json[competitionDate]) : null,
       agingRisks: (json['agingRisks'] as List?)
           ?.map((r) => AgingRisk.fromJson(r))
           .toList() ?? [],
       menstrual: json['menstrual'] != null ? MenstrualData.fromJson(json['menstrual']) : null,
+      competitionDate: json['competitionDate'] != null ? DateTime.parse(json['competitionDate']) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-      competitionDate: competitionDate?.toIso8601String(),
     return {
       'name': name,
       'birthDate': birthDate?.toIso8601String(),
@@ -60,40 +61,31 @@ class User {
       'goal': goal,
       'created': created.toIso8601String(),
       'settings': settings.toJson(),
-      competitionDate: competitionDate?.toIso8601String(),
       'agingRisks': agingRisks.map((r) => r.toJson()).toList(),
-      competitionDate: competitionDate?.toIso8601String(),
       'menstrual': menstrual?.toJson(),
-      competitionDate: competitionDate?.toIso8601String(),
+      'competitionDate': competitionDate?.toIso8601String(),
     };
   }
 }
 
 class UserSettings {
-  DateTime? competitionDate;
   List<String> workoutDays;
   int restTime;
   double progressionRate;
   String theme;
   bool darkMode;
   bool bottomNavAutoHide;
-  DateTime? competitionDate;
-  DateTime? competitionDate;
-  DateTime? competitionDate; // Added
 
   UserSettings({
-    this.competitionDate,
     this.workoutDays = const ['monday', 'wednesday', 'friday'],
     this.restTime = 90,
     this.progressionRate = 0.02,
     this.theme = 'blue',
     this.darkMode = false,
     this.bottomNavAutoHide = false,
-    this.competitionDate,
   });
 
   factory UserSettings.fromJson(Map<String, dynamic> json) {
-     competitionDate: json[competitionDate] != null ? DateTime.parse(json[competitionDate]) : null,
     return UserSettings(
       workoutDays: List<String>.from(json['workoutDays'] ?? ['monday', 'wednesday', 'friday']),
       restTime: json['restTime'] ?? 90,
@@ -101,15 +93,10 @@ class UserSettings {
       theme: json['theme'] ?? 'blue',
       darkMode: json['darkMode'] ?? false,
       bottomNavAutoHide: json['bottomNavAutoHide'] ?? false,
-      'competitionDate': competitionDate?.toIso8601String(),
-      competitionDate: json['competitionDate'] != null ? DateTime.parse(json['competitionDate']) : null,
-      'competitionDate': competitionDate?.toIso8601String(),
-      competitionDate: json['competitionDate'] != null ? DateTime.parse(json['competitionDate']) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-      competitionDate: competitionDate?.toIso8601String(),
     return {
       'workoutDays': workoutDays,
       'restTime': restTime,
@@ -117,7 +104,6 @@ class UserSettings {
       'theme': theme,
       'darkMode': darkMode,
       'bottomNavAutoHide': bottomNavAutoHide,
-      'competitionDate': competitionDate?.toIso8601String(),
     };
   }
 }
@@ -148,7 +134,6 @@ class AgingRisk {
   }
 
   Map<String, dynamic> toJson() {
-      competitionDate: competitionDate?.toIso8601String(),
     return {
       'factor': factor,
       'severity': severity,
@@ -175,7 +160,6 @@ class MenstrualData {
   }
 
   Map<String, dynamic> toJson() {
-      competitionDate: competitionDate?.toIso8601String(),
     return {
       'lastPeriodStart': lastPeriodStart?.toIso8601String(),
       'cycleLength': cycleLength,
