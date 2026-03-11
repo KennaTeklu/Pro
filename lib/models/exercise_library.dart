@@ -1,4 +1,3 @@
-import 'muscle.dart';
 
 class ExerciseDefinition {
   final String name;

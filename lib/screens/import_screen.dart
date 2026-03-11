@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:convert';
-import '../services/data_service.dart';
+import 'package:provider/provider.dart';
+import '../providers/data_provider.dart';
 import '../services/local_storage.dart';
-import '../models/user.dart';
-import '../models/workout.dart';
 import 'main_screen.dart';
 
 class ImportScreen extends StatefulWidget {
@@ -27,10 +26,8 @@ class _ImportScreenState extends State<ImportScreen> {
       try {
         String content = utf8.decode(result.files.single.bytes!);
         Map<String, dynamic> json = jsonDecode(content);
-        // TODO: Validate and load into DataService
-        // For now, just save raw and restart
         await LocalStorage.saveRawData(json);
-        DataService().initFromStorage();
+        Provider.of<DataProvider>(context, listen: false).save();
         if (mounted) {
           Navigator.pushReplacement(
             context,
@@ -49,29 +46,18 @@ class _ImportScreenState extends State<ImportScreen> {
 
   void _startFresh() {
     // Set empty data and go to settings
-    DataService().user = User();
-    DataService().workouts = [];
-    DataService().exercises = {};
-    DataService().save();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => const MainScreen()),
     );
-    // Optionally navigate to settings tab
   }
 
   Future<void> _loadSample() async {
     setState(() => _isLoading = true);
     try {
-      // Load the sample data from assets (we'll add an assets folder later)
-      // For now, we'll create a minimal sample
-      final sampleUser = User(name: 'Sample User', birthDate: DateTime(1990, 5, 15));
-      final sampleWorkouts = <Workout>[];
-      // ... populate sample workouts
-      DataService().user = sampleUser;
-      DataService().workouts = sampleWorkouts;
-      DataService().exercises = {};
-      await DataService().save();
+      // Load sample data from assets or generate
+      // For now, we'll just navigate
+      await Future.delayed(const Duration(seconds: 1));
       if (mounted) {
         Navigator.pushReplacement(
           context,

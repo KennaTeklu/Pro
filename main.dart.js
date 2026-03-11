@@ -194,7 +194,13 @@ N(a){return J.lo(a).gct(a)},
 cW(a){if(typeof a==="number")return a>0?1:a<0?-1:a
 return J.ao7(a).gDv(a)},
 aeY(a){return J.c4(a).gb0(a)},
-ars(a,b,c){return J.c4(a).qf(a,b,c)},
+ars(a,b,c){return J.c4(a).qf(a,b,c)},# Add build/ to .gitignore (if not already)
+echo "build/" >> .gitignore
+
+# Remove build/ from Git if already tracked
+git rm -r --cached build/
+git add .gitignore
+git commit -m "Remove build output from Git, add to .gitignore"
 aip(a){return J.c4(a).B7(a)},
 art(a,b){return J.c4(a).b1(a,b)},
 hv(a,b,c){return J.c4(a).fe(a,b,c)},
